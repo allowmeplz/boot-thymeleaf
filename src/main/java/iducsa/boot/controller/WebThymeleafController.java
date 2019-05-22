@@ -23,6 +23,7 @@ public class WebThymeleafController {
 	
 	@RequestMapping("/")
 	public String home(Model model) {
+	
 		return "index";
 	}
 	
