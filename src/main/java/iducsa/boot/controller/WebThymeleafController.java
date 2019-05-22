@@ -23,9 +23,6 @@ public class WebThymeleafController {
 	
 	@RequestMapping("/")
 	public String home(Model model) {
-		model.addAttribute("test", "인덕컴소");
-		model.addAttribute("ljh", "이지훈");
-		model.addAttribute("users", userRepo.findAll());
 		return "index";
 	}
 	
