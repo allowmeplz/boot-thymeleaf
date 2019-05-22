@@ -22,16 +22,30 @@
 		      <th scope="col">아이디</th>
 		      <th scope="col">이름</th>
 		      <th scope="col">회사</th>
+		      <th scope="col">Update</th>
+		      <th scope="col">Delete</th>
 		    </tr>
 		  </thead>
 		  <tbody>
 		    <tr>
 		      <tr>
-		        <td scope="row">1</td>
-				<td th:text="${name}"></td>
-				<td th:text="${company}"></td>
-		    </tr>
-		  
+		      	<form th:action="@{/users/{id}(id=${id})}" th:method="put">
+			        <div th:object="${user}">
+			        <th scope="row"><span th:text="${id}"></span></th>
+			        <td><input type="text" name="name" th:field="*{name}" /></td>
+					<td><input type="text" name="company" th:field="*{company}" /></td>
+			        <!-- td><input type="text" name="name" th:value="${name}" /></td>
+					<td><input type="text" name="company" th:value="${company}" /></td-->
+					<td><button type="submit" id="updateButton">Update</button></td>
+					</div>
+		  		</form>
+		  		<td>
+				<form th:action="@{/users/{id}(id=${id})}" th:method="delete">
+			  		<input type="hidden" name="id" th:value="${id}" />
+			  		<button type="submit" id="deleteButton">Delete</button>
+			  	</form>
+			  	</td>
+		  	</tr>
 		  </tbody>
 		</table>
 	   </div>
