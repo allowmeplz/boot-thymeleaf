@@ -21,7 +21,7 @@ import iducsa.boot.domain.User;
 import iducsa.boot.repositories.UserRepository;
 
 @Controller
-public class WebThymeleafController {
+public class UserController {
 	@Autowired UserRepository userRepo; // Dependency Injection 
 	// 원래의 사용방법
 	// UserRepository userRepo = new UserRepositoryImpl(); <- interface를 구현화 시킨것(직접해야함)
@@ -30,6 +30,11 @@ public class WebThymeleafController {
 	public String home(Model model) {
 	
 		return "index";
+	}
+	
+	@GetMapping("/user-login") 
+	public String getLoginForm(Model model) {
+		return "login";
 	}
 	
 	@GetMapping("/user-reg-form") 
