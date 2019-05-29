@@ -2,6 +2,7 @@ package iducsa.boot.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,9 @@ import idu.cs.exception.ResourceNotFoundException;
 import iducsa.boot.domain.User;
 import iducsa.boot.repositories.UserRepository;
 
-@Controller
+@Controller //@Componenet 
+// Spring Framework에게 이 클래스로부터 작성된 객체는 Controller 역할을 함을 알려줌
+// Spring이 이 클래스로부터 
 public class UserController {
 	@Autowired UserRepository userRepo; // Dependency Injection 
 	// 원래의 사용방법
@@ -32,17 +35,50 @@ public class UserController {
 		return "index";
 	}
 	
-	@GetMapping("/user-login") 
+	@GetMapping("/user-login-form") 
 	public String getLoginForm(Model model) {
 		return "login";
 	}
 	
-	@GetMapping("/user-reg-form") 
-	public String getRegForm(Model model) {
-		return "form";
+	@PostMapping("/login")
+	public String loginUser(@Valid User user, HttpSession session) {
+		System.out.println("login process : " + user.getUserId() + user.getUserPw());
+		User sessionUser = userRepo.findByUserId(user.getUserId());
+		if(sessionUser == null) {
+			System.out.println("id error.. : ");
+			return "redirect:/user-login-form";
+		}
+		if(!sessionUser.getUserPw().equals(user.getUserPw())) {
+			System.out.println("pw error.. : ");
+			return "redirect:/user-login-form";
+		}
+		session.setAttribute("user", sessionUser);
+		//userRepo.save(user);
+		
+		return "redirect:/";
 	}
 	
-	@GetMapping("/users")
+	@GetMapping("/logout")
+	public String logoutUser(HttpSession session) {
+		session.removeAttribute("user");
+		//session.invalidate(); // 모든 세션정보가 사라짐 (이걸 더 많이 씀)
+		return "redirect:/";
+	}
+	
+	@GetMapping("/user-register-form") 
+	public String getRegForm(Model model) {
+		return "register";
+	}
+	
+	@PostMapping("/regist")
+	public String registUser(@Valid User user, Model model) {
+		if(userRepo.save(user) == null)
+			return "redirect:/user-register-form";
+		model.addAttribute("users", userRepo.findAll());
+		return "redirect:/userlist";
+	}
+	
+	@GetMapping("/userlist")
 	public String getAllUser(Model model) {
 		model.addAttribute("users", userRepo.findAll());
 		return "userlist";
@@ -50,7 +86,10 @@ public class UserController {
 	
 	@PostMapping("/users")
 	public String createUser(@Valid @RequestBody User user, Model model) {
-		userRepo.save(user);
+		if(userRepo.save(user) != null)
+			System.out.println("Database 등록 성공");
+		else
+			System.out.println("Database 등록 실패");
 		model.addAttribute("users", userRepo.findAll());
 		return "redirect:/users";
 	}	
