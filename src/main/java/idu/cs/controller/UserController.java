@@ -82,6 +82,19 @@ public class UserController {
 	}
 	
 	@GetMapping("/user-update-form") 
+	public String getUpdateForm(Model model, HttpSession session) {
+		// 서비스를 통해 리파지터리로부터 정보를 가져와야 하나 session에 저장된 정보를 활용한다.
+		
+		User user = (User)session.getAttribute("user");
+		/*
+		User sessionUser = userService.getUserById(user.getId());
+		model.addAttribute("user", sessionUser);
+		*/
+		model.addAttribute("user", user);
+		return "info";
+	}
+	
+	@GetMapping("/user-updat-form") 
 	public String getUpdatForm(HttpSession session) {
 		return "update";
 	}
@@ -111,9 +124,9 @@ public class UserController {
 			throws ResourceNotFoundException {
 		UserEntity user = userRepo.findById(userId).get(); //.orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + userId));
 		// Java Lambda
-		/*model.addAttribute("id", user.getId());
-		model.addAttribute("name", user.getName());
-		model.addAttribute("company", user.getCompany());*/
+//		model.addAttribute("id", user.getId());
+//		model.addAttribute("name", user.getName());
+//		model.addAttribute("company", user.getCompany());
 		model.addAttribute("user",user);
 		return "user";
 		//return ResponseEntity.ok().body(user);
@@ -129,20 +142,19 @@ public class UserController {
 	}
 	
 	@PutMapping("/users/{id}")
-	public String updateUser(@PathVariable(value = "id") Long userId,@Valid UserEntity userDetails, Model model) {
-		UserEntity user = userRepo.findById(userId).get();
-		user.setName(userDetails.getName());
-		user.setCompany(userDetails.getCompany());
-		userRepo.save(user);
-		model.addAttribute("users", userRepo.findAll());
-		return "redirect:/users";
+	public String updateUser(@PathVariable(value = "id") Long userId,@Valid User user, Model model, HttpSession session) {
+		user.setId(userService.getUserById(userId).getId());
+		userService.updateUser(user);
+		session.setAttribute("user", user); // session 사용
+		return "redirect:/";
 	}	
 	
 	@DeleteMapping("/users/{id}")
-	public String deleteUser(@PathVariable(value = "id") Long userId, Model model) {
+	public String deleteUser(@PathVariable(value = "id") Long userId, Model model, HttpSession session) {
 		UserEntity user = userRepo.findById(userId).get();
 		userRepo.delete(user);
 		model.addAttribute("name", user.getName());
+		session.setAttribute("user", user);
 		return "user-deleted";
 	}
 }

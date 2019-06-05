@@ -2,28 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Kanox</title>
-    <link rel="icon" href="img/favicon.png">
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <!-- animate CSS -->
-    <link rel="stylesheet" href="css/animate.css">
-    <!-- owl carousel CSS -->
-    <link rel="stylesheet" href="css/owl.carousel.min.css">
-    <!-- themify CSS -->
-    <link rel="stylesheet" href="css/themify-icons.css">
-    <!-- flaticon CSS -->
-    <link rel="stylesheet" href="css/flaticon.css">
-    <!-- font awesome CSS -->
-    <link rel="stylesheet" href="css/magnific-popup.css">
-    <!-- swiper CSS -->
-    <link rel="stylesheet" href="css/slick.css">
-    <link rel="stylesheet" href="css/all.css">
-    <link rel="stylesheet" href="css/nice-select.css">
-    <!-- style CSS -->
-    <link rel="stylesheet" href="css/style.css">
+ <th:block th:include="fragments/header"></th:block>
 </head>
 
 <body>
@@ -38,8 +17,8 @@
                 <div class="col-lg-12">
                     <div class="breadcrumb_iner text-center">
                         <div class="breadcrumb_iner_item">
-							<h2>로그인</h2>
-                            <p>Home <span>//</span>로그인</p>
+							<h2>회원 정보 수정</h2>
+                            <p>Home <span>//</span>Info</p>
                         </div>
                     </div>
                 </div>
@@ -56,28 +35,28 @@
 				<div class="row">
 					<div class="col-lg-2 col-md-2 mt-sm-30"></div>
 					<div class="col-lg-8 col-md-8">
-						<h3 class="mb-30">로그인</h3>
-						<!-- 
-						<form th:action="@{'/login'}" th:method="post">
-						-->
-						<form action="/login" method="post" id="login_form">
+						<h3 class="mb-30">회원 정보 확인 및 수정</h3>
+						 
+						 <form th:action="@{'/users/{id}'(id=${user.id})}" th:method="put" th:object="${user}">
+						 
+						 <!-- object로 가져온건 *를 이용해서 사용한다. (field를 쓸 땐 *를 사용해야 한다.)-->
+						 <!-- form field의 이름은 domain 객체의 field이름과 일치해야 한다. -->
 							<div class="mt-10">
-								<input type="text" name="userId" placeholder="사용자 아이디" onfocus="this.placeholder = ''" onblur="this.placeholder = '사용자 아이디'" required="" class="single-input">
+								<input type="text" th:field="*{userId}" name="userId" placeholder="사용자 아이디" onfocus="this.placeholder = ''" onblur="this.placeholder = '사용자 아이디'" required="" class="single-input" ReadOnly>
 							</div>
 							<div class="mt-10">
-								<input type="password" name="userPw" placeholder="사용자 암호" onfocus="this.placeholder = ''" onblur="this.placeholder = '사용자 암호'" required="" class="single-input">
+								<input type="password" th:field="*{userPw}" name="userPw" placeholder="사용자 암호" onfocus="this.placeholder = ''" onblur="this.placeholder = '사용자 암호'" required="" class="single-input">
 							</div>
 							<div class="mt-10">
-								<button type="submit" class="button button-contactForm btn_4">로그인</button>
+								<input type="text" th:field="*{name}" name="name" placeholder="사용자 이름" onfocus="this.placeholder = ''" onblur="this.placeholder = '사용자 이름'" required="" class="single-input">
 							</div>
-
-							<!-- For Gradient Border Use -->
-							<!-- <div class="mt-10">
-										<div class="primary-input">
-											<input id="primary-input" type="text" name="first_name" placeholder="Primary color" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Primary color'">
-											<label for="primary-input"></label>
-										</div>
-									</div> -->
+							<div class="mt-10">
+								<input type="text" th:field="*{company}" name="company" placeholder="사용자 회사" onfocus="this.placeholder = ''" onblur="this.placeholder = '사용자 회사'" required="" class="single-input">
+							</div>
+							<div class="form-group mt-3">
+				              <button type="submit" class="button button-contactForm btn_4">
+				              	회원 수정</button>
+				            </div>
 						</form>
 					</div>
 					<div class="col-lg-2 col-md-2 mt-sm-30"></div>
