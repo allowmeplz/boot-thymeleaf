@@ -1,5 +1,5 @@
     <!--::header part start::-->
-    <header class="main_menu">
+    <header class="main_menu home_menu">
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-lg-12">
@@ -18,7 +18,7 @@
                                     <a class="nav-link" href="/">Home</a>
                                 </li>
                                 <li th:unless="${session.user}" class="nav-item">
-                                    <a href="/user-login-form">Sign-In</a>
+                                	<a href="/user-login-form">Sign-In</a>
                                 </li>
                                 <li th:unless="${session.user}" class="nav-item">
                                     <a class="nav-link" href="/user-register-form">Sign-Up</a>
@@ -27,7 +27,7 @@
                                     <a class="nav-link" href="/logout">Log-out</a>
                                 </li>
                                 <li  th:if="${session.user}" class="nav-item">
-                                    <a class="nav-link" href="/user-register-form">Update</a>
+                                    <a class="nav-link" href="/user-update-form">Update</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="project.html">Portfolio</a>
