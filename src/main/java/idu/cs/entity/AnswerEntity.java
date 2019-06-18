@@ -15,46 +15,46 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
+import idu.cs.domain.Answer;
 import idu.cs.domain.Question;
 import idu.cs.domain.User;
 
 
 @Entity
-@Table(name = "question") // table이름을 지정할 때 사용
-public class QuestionEntity {
+@Table(name = "answer") // table이름을 지정할 때 사용
+public class AnswerEntity {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long id;
 	//  database에서 sequence number, auto increment => primary key 역할
 
-	private String title;
-	
+
 	@ManyToOne
-	@JoinColumn(name="fk_question_writer")
+	@JoinColumn(name="fk_anwer_writer")
 	private UserEntity writer;
 	
-	@OneToMany(mappedBy="question")
-	@OrderBy("createTime DESC")
+	@OneToMany
+	@JoinColumn(name="fk_anwer_writer")
+	private QuestionEntity question;
 	
 	@Lob
 	private String contents;
 	private LocalDateTime createTime;
 	
-	public Question buildDomain() { // Domain 생성
-		Question question = new Question();
-		question.setId(id);
-		question.setTitle(title);
-		question.setContents(contents);
-		question.setCreateTime(createTime);
-		question.setWriter(writer.buildDomain());
-		
-		return question;
+	public Answer buildDomain() { // Domain 생성
+		Answer answer = new Answer();
+		answer.setId(id);
+		answer.setContents(contents);
+		answer.setCreateTime(createTime);
+		answer.setWriter(writer.buildDomain());
+		answer.setQuestion(question.buildDomain());
+
+		return answer;
 	}
 	
 	public void buildEntity(Question question) {
 		
 		id = question.getId();
-		title = question.getTitle();
 		
 		UserEntity entity = new UserEntity();
 		entity.buildEntity(question.getWriter());
@@ -69,12 +69,6 @@ public class QuestionEntity {
 	}
 	public void setId(Long id) {
 		this.id = id;
-	}
-	public String getTitle() {
-		return title;
-	}
-	public void setTitle(String title) {
-		this.title = title;
 	}
 	public UserEntity getWriter() {
 		return writer;
